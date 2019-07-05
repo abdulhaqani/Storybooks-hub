@@ -12,7 +12,7 @@ router.get(
 
 router.get(
   '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', { failureRedirect: '/', scope: 'https://www.googleapis.com/auth/plus.login' }),
   (req, res) => {
     res.redirect('/dashboard');
   }
