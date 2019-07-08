@@ -20,4 +20,8 @@ router.get(
     res.redirect('/dashboard');
   }
 );
+router.post('/login', () => {
+  console.log('post req');
+});
+
 module.exports = router;
