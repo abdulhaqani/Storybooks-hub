@@ -19,3 +19,4 @@ const UserSchema = new Schema({
     type: String,
   },
 });
+mongoose.model('users', UserSchema);
