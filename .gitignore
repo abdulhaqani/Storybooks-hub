@@ -1,6 +1,2 @@
 node_modules
-<<<<<<< HEAD
-*/keys
-=======
-/config/keys
->>>>>>> a5a55257374b3d4d452c9e10c343008c4681fb06
+*/keys.js
