@@ -4,6 +4,8 @@ const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 
+const app = express();
+
 // load models
 require('./models/User');
 
@@ -11,28 +13,36 @@ require('./models/User');
 require('./config/passport')(passport);
 
 // Load routes
+const index = require('./routes/index');
 const auth = require('./routes/auth');
 
 // load keys
 const keys = require('./config/keys');
 
-// Map global promises
-mongoose.Promise = global.Promise;
-
 // mongoose connect
 mongoose
-  .connect(keys.mongoURI, { useNewUrlParser: true })
+  .connect(keys.mongoURI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
   .then(() => console.log('connected to mongoDB'))
   .catch(err => console.log(err));
 
-const app = express();
+// Map global promises
+mongoose.Promise = global.Promise;
 
-app.get('/', (req, res) => {
-  res.send('Working 1');
-});
+// connections
+mongoose.connection
+  .once('open', () => {
+    console.log('connected to storybooks-dev');
+  })
+  .on('error', error => {
+    console.log(error);
+  });
+// cookie parser middleware
+app.use(cookieParser());
 
-//
-app.use(cookieParser);
+// express session middleware
 app.use(
   expressSession({
     secret: 'secret',
@@ -41,17 +51,18 @@ app.use(
   })
 );
 
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Set global vars
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
   next();
 });
 
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
 // Use routes
+app.use('/', index);
 app.use('/auth', auth);
 
 const port = process.env.PORT || 5000;
