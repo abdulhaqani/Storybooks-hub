@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
+const exphbs = require('express-handlebars');
 
 const app = express();
 
@@ -39,6 +40,16 @@ mongoose.connection
   .on('error', error => {
     console.log(error);
   });
+
+// handlebars middleware
+app.engine(
+  'handlebars',
+  exphbs({
+    defaultLayout: 'main',
+  })
+);
+app.set('view engine', 'handlebars');
+
 // cookie parser middleware
 app.use(cookieParser());
 
