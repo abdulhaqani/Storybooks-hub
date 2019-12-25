@@ -4,6 +4,7 @@ const passport = require('passport');
 const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
+const path = require('path');
 
 const app = express();
 
@@ -16,6 +17,7 @@ require('./config/passport')(passport);
 // Load routes
 const index = require('./routes/index');
 const auth = require('./routes/auth');
+const stories = require('./routes/stories');
 
 // load keys
 const keys = require('./config/keys');
@@ -72,9 +74,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// set static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Use routes
 app.use('/', index);
 app.use('/auth', auth);
+app.use('/stories', stories);
 
 const port = process.env.PORT || 5000;
 
