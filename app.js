@@ -5,11 +5,13 @@ const expressSession = require('express-session');
 const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 // load models
 require('./models/User');
+require('./models/Story');
 
 // Passport Config
 require('./config/passport')(passport);
@@ -30,6 +32,10 @@ mongoose
   })
   .then(() => console.log('connected to mongoDB'))
   .catch(err => console.log(err));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
 
 // Map global promises
 mongoose.Promise = global.Promise;

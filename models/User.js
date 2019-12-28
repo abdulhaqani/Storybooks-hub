@@ -18,5 +18,8 @@ const UserSchema = new Schema({
   LastName: {
     type: String,
   },
+  image: {
+    type: String,
+  },
 });
 mongoose.model('users', UserSchema);

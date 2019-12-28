@@ -1,4 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
+const Story = mongoose.model('stories');
+const User = mongoose.model('users');
+
 const { ensureAuthenticated } = require('../helpers/auth');
 
 const router = express.Router();
@@ -19,4 +24,20 @@ router.get('/show', (req, res) => {
   res.render('stories/show');
 });
 
+// post requests
+// add form
+router.post('/', (req, res) => {
+  const newStory = {
+    title: req.body.title,
+    body: req.body.body,
+    status: req.body.status,
+    allowComments: !!req.body.allowComments,
+    user: req.user.id,
+  };
+
+  // create story
+  new Story(newStory).save().then(story => {
+    res.redirect(`/stories/show/${story.id}`);
+  });
+});
 module.exports = router;
