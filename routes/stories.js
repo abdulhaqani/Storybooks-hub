@@ -9,7 +9,11 @@ const { ensureAuthenticated } = require('../helpers/auth');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('stories/index');
+  Story.find({ status: 'public' })
+    .populate('user')
+    .then(stories => {
+      res.render('stories/index', { stories });
+    });
 });
 
 router.get('/add', ensureAuthenticated, (req, res) => {
@@ -31,7 +35,7 @@ router.post('/', (req, res) => {
     title: req.body.title,
     body: req.body.body,
     status: req.body.status,
-    allowComments: !!req.body.allowComments,
+    allowComments: !!req.body.allowComments, // !! means true if not null false otherwise
     user: req.user.id,
   };
 
