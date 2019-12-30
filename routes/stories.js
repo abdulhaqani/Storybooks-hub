@@ -24,8 +24,12 @@ router.get('/edit', ensureAuthenticated, (req, res) => {
   res.render('stories/edit');
 });
 
-router.get('/show', (req, res) => {
-  res.render('stories/show');
+router.get('/show/:id', (req, res) => {
+  Story.findOne({ _id: req.params.id })
+    .populate('user')
+    .then(story => {
+      res.render('stories/show', { story });
+    });
 });
 
 // post requests
