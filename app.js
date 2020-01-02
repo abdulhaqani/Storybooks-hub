@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 
 // method override middleware
 app.use(methodOverride('_method'));
+
 // Map global promises
 mongoose.Promise = global.Promise;
 
