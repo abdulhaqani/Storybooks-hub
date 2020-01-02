@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -36,10 +37,12 @@ mongoose
   .then(() => console.log('connected to mongoDB'))
   .catch(err => console.log(err));
 
+// body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-// parse application/json
 app.use(bodyParser.json());
 
+// method override middleware
+app.use(methodOverride('_method'));
 // Map global promises
 mongoose.Promise = global.Promise;
 

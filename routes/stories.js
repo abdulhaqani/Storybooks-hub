@@ -54,4 +54,18 @@ router.post('/', (req, res) => {
     res.redirect(`/stories/show/${story.id}`);
   });
 });
+
+// Edit form process
+router.put('/:id', (req, res) => {
+  Story.findOne({ _id: req.params.id }).then(story => {
+    story.title = req.body.title;
+    story.body = req.body.body;
+    story.status = req.body.status;
+    story.allowComments = !!req.body.allowComments; // !! means true if not null false otherwise
+    story.save().then(() => {
+      res.redirect('/dashboard');
+    });
+  });
+});
+
 module.exports = router;
