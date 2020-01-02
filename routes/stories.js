@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const Story = mongoose.model('stories');
-const User = mongoose.model('users');
 
 const { ensureAuthenticated } = require('../helpers/auth');
 
