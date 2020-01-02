@@ -10,6 +10,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   Story.find({ status: 'public' })
     .populate('user')
+    .sort({ date: 'desc' })
     .then(stories => {
       res.render('stories/index', { stories });
     });
@@ -21,17 +22,18 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 
 router.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Story.findOne({ _id: req.params.id }).then(story => {
-    res.render('stories/edit', { story });
+    if (story.user != req.user.id) {
+      res.redirect('/stories');
+    } else {
+      res.render('stories/edit', { story });
+    }
   });
-});
-
-router.get('/edit', ensureAuthenticated, (req, res) => {
-  res.render('stories/edit');
 });
 
 router.get('/show/:id', (req, res) => {
   Story.findOne({ _id: req.params.id })
     .populate('user')
+    .populate('comments.commentUser')
     .then(story => {
       res.render('stories/show', { story });
     });
